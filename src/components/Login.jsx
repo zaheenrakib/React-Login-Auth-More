@@ -1,13 +1,32 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../providers/AuthProvider';
 
 const Login = () => {
 
-    const handleLogin = e =>{
+    const { signInUser ,signInWithGoogle } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const handleLogin = e => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
-        console.log(email,password);
+        console.log(email, password);
+
+        signInUser(email, password)
+        .then(result =>{
+             console.log(result.user);
+             e.target.reset();
+             navigate('/');
+        })
+        .catch(error => console.log(error))
+    }
+    const handleGoogleSignIn = () => {
+        signInWithGoogle()
+        .then(result =>{
+             console.log(result.user);
+        })
+        .catch(error => console.log(error)) 
     }
 
     return (
@@ -38,6 +57,7 @@ const Login = () => {
                         </div>
                     </form>
                     <p>New To Auth ? Please <Link to="/register"><button className='btn btn-link'>Register</button></Link> </p>
+                    <p><button onClick={handleGoogleSignIn} className='btn btn-gost'>Google</button></p>
                 </div>
             </div>
         </div>

@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../providers/AuthProvider';
 import { Link } from 'react-router-dom';
 
 const Register = () => {
+    const { createUser } = useContext(AuthContext);
 
-    const handleRegister = e =>{
+
+
+    const handleRegister = e => {
         e.preventDefault();
         const name = e.target.name.value;
         const email = e.target.email.value;
         const password = e.target.password.value;
-        console.log(email,password,name);
+        console.log(email, password, name);
+
+        //create user in firebase
+        createUser(email, password)
+            .then(result => {
+                console.log(result.user);
+            })
+            .catch(error => {
+                console.log(error);
+
+            })
+
     }
 
     return (
@@ -19,7 +34,7 @@ const Register = () => {
                 </div>
                 <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                     <form onSubmit={handleRegister} className="card-body">
-                    <div className="form-control">
+                        <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Name</span>
                             </label>
@@ -44,7 +59,7 @@ const Register = () => {
                             <button className="btn btn-primary">Register</button>
                         </div>
                     </form>
-                    <p>Already Have Account ? Please <Link to="/login"><button className='btn btn-link'>Login</button></Link> </p>
+                    <p>Already Have Account ? Please<Link to="/login"><button className='btn btn-link'>Login</button></Link> </p>
                 </div>
             </div>
         </div>
